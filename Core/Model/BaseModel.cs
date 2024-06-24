@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Model
 {
-    using System;
-
     public abstract class BaseModel
     {
         private static int nextId = 1;
@@ -26,5 +22,4 @@ namespace Core.Model
             UpdatedAt = DateTime.Now;
         }
     }
-
 }

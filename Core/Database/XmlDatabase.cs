@@ -1,5 +1,6 @@
 ﻿using Core.Interface;
 using Core.Model;
+using Core.Log;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ namespace Core.Database
 {
     public class XmlDatabase<T> : BaseDatabase<T>, IDatabase<T> where T : BaseModel, new()
     {
-        public XmlDatabase(string fileName, string folderName):base(fileName,folderName)
+        public XmlDatabase() : base()
         {
             EnsureFolderExists(Path.GetDirectoryName(FullPath));
         }
@@ -24,10 +25,11 @@ namespace Core.Database
                 serializer.Serialize(writer, items);
                 writer.Flush();
                 writer.Close();
+                LoggingManager.LogMessage($"Saved {items.Count} items to XML database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving XML database: {ex.Message}");
+                LoggingManager.LogError($"Error saving XML database: {ex.Message}", nameof(Save), 0);
                 throw;
             }
         }
@@ -40,17 +42,19 @@ namespace Core.Database
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
                     using TextReader reader = new StreamReader(FullPath);
-                    return (List<T>)serializer.Deserialize(reader);
+                    var items = (List<T>)serializer.Deserialize(reader);
+                    LoggingManager.LogMessage($"Loaded {items.Count} items from XML database");
+                    return items;
                 }
                 else
                 {
-                    Console.WriteLine($"XML database file '{FullPath}' not found. Returning empty list.");
+                    LoggingManager.LogMessage($"XML database file '{FullPath}' not found. Returning empty list.");
                     return new List<T>();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading XML database: {ex.Message}");
+                LoggingManager.LogError($"Error loading XML database: {ex.Message}", nameof(Load), 0);
                 throw;
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Core.Interface;
 using Core.Model;
+using Core.Log;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Core.Database
 {
     public class BinaryDatabase<T> : BaseDatabase<T>, IDatabase<T> where T : BaseModel, new()
     {
-        public BinaryDatabase(string fileName, string folderName):base(fileName, folderName)
+        public BinaryDatabase() : base()
         {
             EnsureFolderExists(Path.GetDirectoryName(FullPath));
         }
@@ -20,14 +21,14 @@ namespace Core.Database
             try
             {
                 EnsureFolderExists(FolderName);
-
                 string json = JsonConvert.SerializeObject(items);
                 byte[] data = Encoding.UTF8.GetBytes(json);
                 File.WriteAllBytes(FullPath, data);
+                LoggingManager.LogMessage($"Saved {items.Count} items to binary database");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving database: {ex.Message}");
+                LoggingManager.LogError($"Error saving binary database: {ex.Message}", nameof(Save), 0);
                 throw;
             }
         }
@@ -40,17 +41,19 @@ namespace Core.Database
                 {
                     byte[] data = File.ReadAllBytes(FullPath);
                     string json = Encoding.UTF8.GetString(data);
-                    return JsonConvert.DeserializeObject<List<T>>(json) ?? new List<T>();
+                    var items = JsonConvert.DeserializeObject<List<T>>(json) ?? new List<T>();
+                    LoggingManager.LogMessage($"Loaded {items.Count} items from binary database");
+                    return items;
                 }
                 else
                 {
-                    Console.WriteLine($"Database file '{FullPath}' not found. Returning empty list.");
+                    LoggingManager.LogMessage($"Binary database file '{FullPath}' not found. Returning empty list.");
                     return new List<T>();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading database: {ex.Message}");
+                LoggingManager.LogError($"Error loading binary database: {ex.Message}", nameof(Load), 0);
                 throw;
             }
         }

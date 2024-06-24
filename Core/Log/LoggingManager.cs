@@ -11,14 +11,14 @@ namespace Core.Log
         public static bool IsFile { get; set; } = true;
 
         private static readonly string logDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
-
         public static string FileName { get; set; } = string.Empty;
+
         static LoggingManager()
         {
             IsConsole = false;
             IsFile = true;
             cLT = new ConsoleLoggingTarget();
-            cFT = new FileLoggingTarget((string.IsNullOrEmpty(FileName))?"log.txt":FileName);
+            cFT = new FileLoggingTarget((string.IsNullOrEmpty(FileName)) ? "log.txt" : FileName);
             EnsureLogFolderExists();
         }
 
