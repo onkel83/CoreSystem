@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Helper;
 using Core.Interfaces;
 using Core.Log;
 
@@ -24,11 +25,11 @@ namespace Core
             if (configSettings.ContainsKey(key))
             {
                 configSettings[key] = value;
-                LoggingManager.LogMessage($"Config setting '{key}' updated to '{value}'");
+                LoggingHelper.LogMessage($"Config setting '{key}' updated to '{value}'");
             }
             else
             {
-                LoggingManager.LogMessage($"Config setting '{key}' does not exist.");
+                LoggingHelper.LogMessage($"Config setting '{key}' does not exist.");
             }
         }
 

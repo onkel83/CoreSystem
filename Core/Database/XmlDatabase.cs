@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Core.Helper;
 
 namespace Core.Database
 {
@@ -20,16 +21,12 @@ namespace Core.Database
             try
             {
                 EnsureFolderExists(FolderName);
-                XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-                using TextWriter writer = new StreamWriter(FullPath);
-                serializer.Serialize(writer, items);
-                writer.Flush();
-                writer.Close();
-                LoggingManager.LogMessage($"Saved {items.Count} items to XML database");
+                FileHelper.SaveXmlFile(FullPath, items);
+                LoggingHelper.LogMessage($"Saved {items.Count} items to Xmldatabase");
             }
             catch (Exception ex)
             {
-                LoggingManager.LogError($"Error saving XML database: {ex.Message}", nameof(Save), 0);
+                LoggingHelper.LogError($"Error saving Xmldatabase: {ex.Message}", nameof(Save), 19);
                 throw;
             }
         }
@@ -40,21 +37,19 @@ namespace Core.Database
             {
                 if (File.Exists(FullPath))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-                    using TextReader reader = new StreamReader(FullPath);
-                    var items = (List<T>)serializer.Deserialize(reader);
-                    LoggingManager.LogMessage($"Loaded {items.Count} items from XML database");
+                    var items = FileHelper.LoadXmlFile<T>(FullPath);
+                    LoggingHelper.LogMessage($"Loaded {items.Count} items from Xmldatabase");
                     return items;
                 }
                 else
                 {
-                    LoggingManager.LogMessage($"XML database file '{FullPath}' not found. Returning empty list.");
+                    LoggingHelper.LogMessage($"Xmldatabase file '{FullPath}' not found. Returning empty list.");
                     return new List<T>();
                 }
             }
             catch (Exception ex)
             {
-                LoggingManager.LogError($"Error loading XML database: {ex.Message}", nameof(Load), 0);
+                LoggingHelper.LogError($"Error loading Xmldatabase: {ex.Message}", nameof(Load), 38);
                 throw;
             }
         }

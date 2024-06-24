@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Core.Manager;
+using Core.Helper;
 
 namespace Core.Database
 {
@@ -22,38 +23,38 @@ namespace Core.Database
                 DatabaseType.Binary => (IDatabase<T>)new BinaryDatabase<T>(),
                 _ => throw new ArgumentException("Unsupported database type", nameof(type)),
             };
-            LoggingManager.LogMessage($"DatabaseSelector initialized with type: {type} and file: {fileName}");
+            LoggingHelper.LogMessage($"DatabaseSelector initialized with type: {type} and file: {fileName}");
         }
 
         public void Save(List<T> items)
         {
             _database.Save(items);
-            LoggingManager.LogMessage($"Saved {items.Count} items");
+            LoggingHelper.LogMessage($"Saved {items.Count} items");
         }
 
         public List<T> Load()
         {
             var items = _database.Load();
-            LoggingManager.LogMessage($"Loaded {items.Count} items");
+            LoggingHelper.LogMessage($"Loaded {items.Count} items");
             return items;
         }
 
         public void Add(T item)
         {
             _database.Add(item);
-            LoggingManager.LogMessage($"Added item with ID: {item.ID}");
+            LoggingHelper.LogMessage($"Added item with ID: {item.ID}");
         }
 
         public void Delete(string ID)
         {
             _database.Delete(ID);
-            LoggingManager.LogMessage($"Deleted item with ID: {ID}");
+            LoggingHelper.LogMessage($"Deleted item with ID: {ID}");
         }
 
         public void Update(T updatedItem)
         {
             _database.Update(updatedItem);
-            LoggingManager.LogMessage($"Updated item with ID: {updatedItem.ID}");
+            LoggingHelper.LogMessage($"Updated item with ID: {updatedItem.ID}");
         }
     }
 

@@ -1,11 +1,11 @@
-﻿// Core/Database/BaseDatabase.cs
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Core.Interface;
 using Core.Model;
 using Core.Log;
 using Core.Manager;
+using Core.Helper;
 
 namespace Core.Database
 {
@@ -40,7 +40,7 @@ namespace Core.Database
             _folderName = ConfigManager.GetConfigValue("DatabaseFolderName");
             EnsureFolderExists(FolderName);
             LoadIDs();
-            LoggingManager.LogMessage($"Database initialized with FileName: {FileName} and FolderName: {FolderName}");
+            LoggingHelper.LogMessage($"Database initialized with FileName: {FileName} and FolderName: {FolderName}");
         }
 
         public abstract List<T> Load();
@@ -52,7 +52,7 @@ namespace Core.Database
             item.ID = ++_lastID;
             items.Add(item);
             Save(items);
-            LoggingManager.LogMessage($"Item added with ID: {item.ID}");
+            LoggingHelper.LogMessage($"Item added with ID: {item.ID}");
         }
 
         public void Delete(string ID)
@@ -64,7 +64,7 @@ namespace Core.Database
                 items.Remove(itemToRemove);
                 ResetIDs(items);
                 Save(items);
-                LoggingManager.LogMessage($"Item deleted with ID: {ID}");
+                LoggingHelper.LogMessage($"Item deleted with ID: {ID}");
             }
         }
 
@@ -76,7 +76,7 @@ namespace Core.Database
             {
                 items[index] = updatedItem;
                 Save(items);
-                LoggingManager.LogMessage($"Item updated with ID: {updatedItem.ID}");
+                LoggingHelper.LogMessage($"Item updated with ID: {updatedItem.ID}");
             }
         }
 
@@ -93,7 +93,7 @@ namespace Core.Database
             {
                 _lastID = items[^1].ID;
             }
-            LoggingManager.LogMessage($"Loaded last ID: {_lastID}");
+            LoggingHelper.LogMessage($"Loaded last ID: {_lastID}");
         }
 
         private void ResetIDs(List<T> items)
@@ -104,7 +104,7 @@ namespace Core.Database
                 item.ID = newID++;
             }
             _lastID = newID - 1;
-            LoggingManager.LogMessage("Reset IDs for items");
+            LoggingHelper.LogMessage("Reset IDs for items");
         }
     }
 }
