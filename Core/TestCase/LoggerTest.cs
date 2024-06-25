@@ -1,21 +1,19 @@
 ﻿using Core.Config;
-using Core.Logging;
 using Core.Interfaces;
+using Core.Logging;
 using System;
 
 namespace Core.TestCase
 {
     public class LoggerTest : TestBase
     {
-        private readonly Logger _log = Logger.Instance;
-        private readonly ConfigLoader _conf = ConfigLoader.Instance;
+        private Logger _log = Logger.Instance;
 
         private static LoggerTest _Instance = new LoggerTest();
         public static LoggerTest Instance { get => _Instance ?? new LoggerTest(); private set => _Instance = value; }
 
         private LoggerTest()
         {
-            base.Run(() => RunLoggerTests());
         }
 
         public override void Start()
@@ -34,7 +32,7 @@ namespace Core.TestCase
             Console.ReadLine();
         }
 
-        private void RunLoggerTests()
+        public void RunLoggerTests()
         {
             _log.RegisterObserver(new ConsoleLogObserver());
 

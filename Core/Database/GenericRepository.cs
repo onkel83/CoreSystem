@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Core.Config;
-using Core.Logging;
 using Core.Models;
 using System;
 using System.Collections.Concurrent;
@@ -8,37 +6,36 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Core.Interfaces;
+using Core.Utilities;
 
 namespace Core.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseModel
     {
         private readonly string _filePath;
-        private readonly Logger _logger;
         private readonly object _lock = new object();
         private readonly ConcurrentQueue<Action> _queue = new ConcurrentQueue<Action>();
 
         public GenericRepository()
         {
-            var dataPath = ConfigLoader.Instance.GetValue("dataFilePath", "DatabaseConfig.json");
+            var dataPath = ConfigHelper.GetConfigValue("dataFilePath", "DatabaseConfig.json");
             if (string.IsNullOrWhiteSpace(dataPath))
             {
                 throw new ArgumentException("The data file path cannot be null or empty. Check the configuration.");
             }
 
             _filePath = Path.Combine(dataPath, $"{typeof(T).Name}.json");
-            _logger = Logger.Instance;
 
             if (!Directory.Exists(Path.GetDirectoryName(_filePath)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
-                _logger.Log(LogLevel.Info, $"Created directory: {Path.GetDirectoryName(_filePath)}");
+                LogHelper.Log(LogLevel.Info, $"Created directory: {Path.GetDirectoryName(_filePath)}");
             }
 
             if (!File.Exists(_filePath))
             {
                 File.WriteAllText(_filePath, "[]");
-                _logger.Log(LogLevel.Info, $"Created file: {_filePath}");
+                LogHelper.Log(LogLevel.Info, $"Created file: {_filePath}");
             }
         }
 
@@ -50,9 +47,9 @@ namespace Core.Repositories
                 {
                     var items = LoadItems();
                     item.ID = items.Any() ? items.Max(i => i.ID) + 1 : 1;
-                    items?.Add(item);
-                    SaveItems(items??new List<T>());
-                    _logger.Log(LogLevel.Info, $"Created item: {item.ID} :: {typeof(T).Name}");
+                    items.Add(item);
+                    SaveItems(items);
+                    LogHelper.Log(LogLevel.Info, $"Created item: {item.ID} :: {typeof(T).Name}");
                 });
             }
         }
@@ -72,13 +69,13 @@ namespace Core.Repositories
             {
                 _queue.Enqueue(() =>
                 {
-                    var items = LoadItems() ?? new List<T>();
+                    var items = LoadItems();
                     var index = items.FindIndex(i => i.ID == item.ID);
                     if (index >= 0)
                     {
                         items[index] = item;
                         SaveItems(items);
-                        _logger.Log(LogLevel.Info, $"Updated item: {item.ID} :: {typeof(T).Name}");
+                        LogHelper.Log(LogLevel.Info, $"Updated item: {item.ID} :: {typeof(T).Name}");
                     }
                 });
             }
@@ -90,13 +87,13 @@ namespace Core.Repositories
             {
                 _queue.Enqueue(() =>
                 {
-                    var items = LoadItems() ?? new List<T>();
+                    var items = LoadItems();
                     var item = items.FirstOrDefault(i => i.ID == id);
                     if (item != null)
                     {
                         items.Remove(item);
                         SaveItems(items);
-                        _logger.Log(LogLevel.Info, $"Deleted item: {item.ID} :: {typeof(T).Name}");
+                        LogHelper.Log(LogLevel.Info, $"Deleted item: {item.ID} :: {typeof(T).Name}");
                     }
                 });
             }
@@ -106,7 +103,7 @@ namespace Core.Repositories
         {
             lock (_lock)
             {
-                return LoadItems()??new List<T>();
+                return LoadItems();
             }
         }
 
@@ -117,14 +114,14 @@ namespace Core.Repositories
                 _queue.Enqueue(() =>
                 {
                     var items = LoadItems();
-                    for (int i = 0; i < items?.Count; i++)
+                    for (int i = 0; i < items.Count; i++)
                     {
                         items[i].ID = i + 1;
                     }
-                    if (items?.Count > 0)
+                    if (items.Count > 0)
                     {
                         SaveItems(items);
-                        _logger.Log(LogLevel.Info, $"Reset IDs for all items of type: {typeof(T).Name}");
+                        LogHelper.Log(LogLevel.Info, $"Reset IDs for all items of type: {typeof(T).Name}");
                     }
                 });
             }
@@ -141,14 +138,10 @@ namespace Core.Repositories
             }
         }
 
-        private List<T>? LoadItems()
+        private List<T> LoadItems()
         {
             var json = File.ReadAllText(_filePath);
-            if (json != null)
-            {
-                return JsonConvert.DeserializeObject<List<T>>(json);
-            }
-            else return new List<T>();
+            return JsonConvert.DeserializeObject<List<T>>(json) ?? new List<T>();
         }
 
         private void SaveItems(List<T> items)

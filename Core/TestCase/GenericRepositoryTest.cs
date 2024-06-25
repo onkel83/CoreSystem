@@ -3,20 +3,20 @@ using Core.Logging;
 using Core.Models;
 using Core.Repositories;
 using System;
+using System.Collections.Generic;
 
 namespace Core.TestCase
 {
     public class GenericRepositoryTest : TestBase
     {
-        private readonly Logger _log = Logger.Instance;
-        private readonly ConfigLoader _conf = ConfigLoader.Instance;
+        private Logger _log = Logger.Instance;
+        private ConfigLoader _conf = ConfigLoader.Instance;
 
         private static GenericRepositoryTest _Instance = new GenericRepositoryTest();
         public static GenericRepositoryTest Instance { get => _Instance ?? new GenericRepositoryTest(); private set => _Instance = value; }
 
         private GenericRepositoryTest()
         {
-            base.Run(() => RunGenericRepositoryTests());
         }
 
         public override void Start()
@@ -35,7 +35,7 @@ namespace Core.TestCase
             Console.ReadLine();
         }
 
-        private void RunGenericRepositoryTests()
+        public void RunGenericRepositoryTests()
         {
             var repository = new GenericRepository<TestModel>();
 

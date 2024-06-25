@@ -6,14 +6,13 @@ namespace Core.TestCase
 {
     public class ConfigLoaderTest : TestBase
     {
-        private readonly ConfigLoader _conf = ConfigLoader.Instance;
+        private ConfigLoader _conf = ConfigLoader.Instance;
 
         private static ConfigLoaderTest _Instance = new ConfigLoaderTest();
         public static ConfigLoaderTest Instance { get => _Instance ?? new ConfigLoaderTest(); private set => _Instance = value; }
 
         private ConfigLoaderTest()
         {
-            base.Run(() => RunConfigLoaderTests());
         }
 
         public override void Start()
@@ -32,7 +31,7 @@ namespace Core.TestCase
             Console.ReadLine();
         }
 
-        private void RunConfigLoaderTests()
+        public void RunConfigLoaderTests()
         {
             string testConfigFileName = "testConfig.json";
 

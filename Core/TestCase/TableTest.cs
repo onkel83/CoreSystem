@@ -9,13 +9,33 @@ namespace Core.TestCase
 {
     public class TableTest : TestBase
     {
-        private readonly Logger _log = Logger.Instance;
-        private readonly ConfigLoader _conf = ConfigLoader.Instance;
+        //private Logger _log = Logger.Instance;
+        //private ConfigLoader _conf = ConfigLoader.Instance;
 
         private static TableTest _Instance = new TableTest();
-        public static TableTest Instance { get => _Instance?? new TableTest(); private set => _Instance = value; }
+        public static TableTest Instance { get => _Instance ?? new TableTest(); private set => _Instance = value; }
 
         private TableTest()
+        {
+        }
+
+        public override void Start()
+        {
+            Console.WriteLine("Start des Tabletests");
+        }
+
+        public override void RunAction(Action action)
+        {
+            action();
+        }
+
+        public override void Stop()
+        {
+            Console.WriteLine("Ende des Tabletests, bitte drücken Sie [Enter]");
+            Console.ReadLine();
+        }
+
+        public void RunTableTests()
         {
             Console.WriteLine("Core Project started...");
 
@@ -26,22 +46,7 @@ namespace Core.TestCase
                 new TestModel { ID = 3, Name = "Test Item 3" }
             };
 
-            base.Run(() => TableRenderer<TestModel>.Render(items));
-        }
-
-        public override void Start()
-        {
-            Console.WriteLine($"Start des Tabletestes");
-        }
-
-        public override void RunAction(Action action)
-        {
-            action();
-        }
-
-        public override void Stop()
-        {
-            Console.WriteLine("Ende des TableTest, bitte [Enter] Drücken zum fortfahren!");
+            TableRenderer<TestModel>.Render(items);
         }
     }
 }
