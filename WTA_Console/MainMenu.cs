@@ -6,8 +6,8 @@ namespace WTA_Console
 {
     public class MainMenu
     {
-        private WorkerManager _wM = new WorkerManager();
-        private WorkTimeManager _wTM = new WorkTimeManager();
+        private readonly WorkerManager _wM = new WorkerManager();
+        private readonly WorkTimeManager _wTM = new WorkTimeManager();
         public MainMenu() { }
 
         public void Run()
