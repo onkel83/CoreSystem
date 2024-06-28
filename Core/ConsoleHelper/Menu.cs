@@ -38,6 +38,8 @@ namespace Core.ConsoleHelper
         private static readonly ConsoleColor _delimiterColor;
         private static readonly Logger _logger = Logger.Instance;
 
+        public static bool isRunning = true;
+
         static Menu()
         {
             // Laden der Konfiguration
@@ -51,13 +53,14 @@ namespace Core.ConsoleHelper
 
         public static void ShowMenu(string title, List<MenuItem> items, int currentDepth = 0)
         {
+            
             if (currentDepth > _maxSubMenuDepth)
             {
                 _logger.Log(LogLevel.Err, "Maximale Tiefe der SubMenüs erreicht.");
                 return;
             }
 
-            while (true)
+            while (isRunning)
             {
                 Console.Clear();
                 PrintCenteredTitle(title);

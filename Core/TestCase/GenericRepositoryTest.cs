@@ -1,4 +1,5 @@
 ﻿using Core.Config;
+using Core.Interfaces;
 using Core.Logging;
 using Core.Models;
 using Core.Repositories;
@@ -9,8 +10,8 @@ namespace Core.TestCase
 {
     public class GenericRepositoryTest : TestBase
     {
-        private Logger _log = Logger.Instance;
-        private ConfigLoader _conf = ConfigLoader.Instance;
+        private readonly Logger _log = Logger.Instance;
+        private readonly ConfigLoader _conf = ConfigLoader.Instance;
 
         private static GenericRepositoryTest _Instance = new GenericRepositoryTest();
         public static GenericRepositoryTest Instance { get => _Instance ?? new GenericRepositoryTest(); private set => _Instance = value; }
@@ -37,30 +38,37 @@ namespace Core.TestCase
 
         public void RunGenericRepositoryTests()
         {
-            var repository = new GenericRepository<TestModel>();
+            try
+            {
+                var repository = new GenericRepository<TestModel>();
 
-            var testItem = new TestModel { Name = "Test Item" };
-            repository.Create(testItem);
-            repository.ProcessQueue();
+                var testItem = new TestModel { Name = "Test Item" };
+                repository.Create(testItem);
+                repository.ProcessQueue();
 
-            var readItem = repository.Read(testItem.ID);
-            Console.WriteLine($"Read item: {readItem?.Name}");
+                var readItem = repository.Read(testItem.ID);
+                Console.WriteLine($"Read item: {readItem?.Name}");
 
-            testItem.Name = "Updated Test Item";
-            repository.Update(testItem);
-            repository.ProcessQueue();
+                testItem.Name = "Updated Test Item";
+                repository.Update(testItem);
+                repository.ProcessQueue();
 
-            var allItems = repository.GetAll();
-            Console.WriteLine($"All items count: {allItems.Count}");
+                var allItems = repository.GetAll();
+                Console.WriteLine($"All items count: {allItems.Count}");
 
-            repository.Delete(testItem.ID);
-            repository.ProcessQueue();
+                repository.Delete(testItem.ID);
+                repository.ProcessQueue();
 
-            allItems = repository.GetAll();
-            Console.WriteLine($"All items count after delete: {allItems.Count}");
+                allItems = repository.GetAll();
+                Console.WriteLine($"All items count after delete: {allItems.Count}");
 
-            repository.ResetIds();
-            repository.ProcessQueue();
+                repository.ResetIds();
+                repository.ProcessQueue();
+            }
+            catch (Exception ex)
+            {
+                _log.Log(LogLevel.Crit, ex.Message, $"[{nameof(GenericRepository<TestModel>)}::{nameof(RunGenericRepositoryTests)}]");
+            }
         }
     }
 

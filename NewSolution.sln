@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WTA_Core_TestApp", "WTA_Core_TestApp\WTA_Core_TestApp.csproj", "{D4CBD514-4E35-480D-B0D0-547CF03B9EDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WTA_Console", "WTA_Console\WTA_Console.csproj", "{8A29BC8F-5959-492E-8CD8-7A45B8C56135}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D4CBD514-4E35-480D-B0D0-547CF03B9EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4CBD514-4E35-480D-B0D0-547CF03B9EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4CBD514-4E35-480D-B0D0-547CF03B9EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A29BC8F-5959-492E-8CD8-7A45B8C56135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A29BC8F-5959-492E-8CD8-7A45B8C56135}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A29BC8F-5959-492E-8CD8-7A45B8C56135}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A29BC8F-5959-492E-8CD8-7A45B8C56135}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
