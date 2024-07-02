@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Core.Logging;
 using Core.Config;
 using Core.Interfaces;
-using Core.Logging;
+using System.Linq;
 
 namespace Core.ConsoleHelper
 {
@@ -53,7 +53,6 @@ namespace Core.ConsoleHelper
 
         public static void ShowMenu(string title, List<MenuItem> items, int currentDepth = 0)
         {
-            
             if (currentDepth > _maxSubMenuDepth)
             {
                 _logger.Log(LogLevel.Err, "Maximale Tiefe der SubMenüs erreicht.");
@@ -116,8 +115,6 @@ namespace Core.ConsoleHelper
 
         private static void PrintMenuItem(MenuItem item)
         {
-            //string formattedItem = $"{_menuDelimiter}  {item.Key}  {item.Description.PadRight(Console.WindowWidth - 8)}{_menuDelimiter}";
-            //Logger.Instance.Log(LogLevel.Debug, formattedItem);
             Console.ForegroundColor = _delimiterColor;
             Console.Write($"{_menuDelimiter}  ");
             Console.ForegroundColor = _keyColor;

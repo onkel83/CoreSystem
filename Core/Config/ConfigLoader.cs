@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Threading;
-using System.Linq;
 using Core.Interfaces;
+using System.Linq;
 
 namespace Core.Config
 {

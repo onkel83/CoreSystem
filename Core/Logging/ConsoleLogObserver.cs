@@ -8,7 +8,7 @@ namespace Core.Logging
     {
         public Task OnLogMessageAsync(string message)
         {
-            Console.WriteLine("[Beobachter] " + message);
+            Console.WriteLine("[Beobachter] ::  " + message);
             return Task.CompletedTask;
         }
     }

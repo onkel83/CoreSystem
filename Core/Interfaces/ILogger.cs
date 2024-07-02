@@ -1,4 +1,6 @@
-﻿namespace Core.Interfaces
+﻿using Core.Interfaces;
+
+namespace Core.Interfaces
 {
     public interface ILogger
     {

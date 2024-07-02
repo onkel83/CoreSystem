@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+
 namespace Core.Interfaces
 {
     public enum LogLevel
