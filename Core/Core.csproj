@@ -9,4 +9,14 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Config\" />
+    <Folder Include="ConsoleHelper\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Logging\" />
+    <Folder Include="Models\" />
+    <Folder Include="TestCase\" />
+    <Folder Include="Utilities\" />
+  </ItemGroup>
+
 </Project>

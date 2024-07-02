@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WTA_Console\WTA_Console.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Core">
       <HintPath>..\Core\bin\Release\netstandard2.1\Core.dll</HintPath>
     </Reference>
